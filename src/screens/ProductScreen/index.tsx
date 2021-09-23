@@ -1,10 +1,11 @@
 import * as React from 'react';
-import {View, Text} from 'react-native';
+import {Text, ScrollView} from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import styles from './styles';
 import product from '../../data/product';
 import QuantitySelector from '../../components/QuantitySelector';
 import Button from '../../components/Button';
+import ImageCarousel from '../../components/ImageCarousel';
 
 const ProductScreen = () => {
   const [selectedOption, setSelectedOption] = React.useState(
@@ -12,16 +13,18 @@ const ProductScreen = () => {
   );
   const [quantity, setQuantity] = React.useState(1);
 
-  const {price, oldPrice, description, options} = product;
+  const {price, oldPrice, description, options, images} = product;
   return (
-    <View style={styles.root}>
+    <ScrollView style={styles.root} showsVerticalScrollIndicator={false}>
       <Text style={styles.title}>{product.title}</Text>
+
+      <ImageCarousel images={images} />
 
       <Picker
         selectedValue={selectedOption}
         onValueChange={(itemValue, _) => setSelectedOption(itemValue)}>
         {options.map(option => (
-          <Picker.Item label={option} value={option} />
+          <Picker.Item key={option} label={option} value={option} />
         ))}
       </Picker>
 
@@ -34,9 +37,15 @@ const ProductScreen = () => {
 
       <QuantitySelector quantity={quantity} setQuantity={setQuantity} />
 
-      <Button text="Add To Cart" onPress={() => console.warn('Add To Card')} />
+      <Button
+        text="Add To Cart"
+        onPress={() => console.warn('Add To Card')}
+        buttonStyles={{
+          backgroundColor: '#e3c905',
+        }}
+      />
       <Button text="Buy Now" onPress={() => console.warn('Buy Now')} />
-    </View>
+    </ScrollView>
   );
 };
 
